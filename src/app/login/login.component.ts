@@ -22,22 +22,23 @@ export class LoginComponent {
     private route: ActivatedRoute,
   ) {}
 
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
     this.error.set(null);
     this.loading.set(true);
 
-    try {
-      await this.authService.login({
-        email: this.email(),
-        password: this.password(),
-      });
-
-      const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      this.router.navigateByUrl(returnUrl);
-    } catch (err: any) {
-      this.error.set(err.error?.detail || 'Login failed. Please try again.');
-    } finally {
-      this.loading.set(false);
-    }
+    this.authService.login({
+      email: this.email(),
+      password: this.password(),
+    }).subscribe({
+      next: () => {
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+        this.router.navigateByUrl(returnUrl);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.error.set(err.error?.detail || 'Login failed. Please try again.');
+        this.loading.set(false);
+      }
+    });
   }
 }

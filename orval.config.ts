@@ -7,7 +7,7 @@ export default defineConfig({
     output: {
       target: './src/app/api/endpoints',
       schemas: './src/app/api/models',
-      client: 'fetch',
+      client: 'angular',
       mode: 'split',
       clean: true,
       baseUrl: environment.apiUrl,

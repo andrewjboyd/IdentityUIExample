@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { getUser, postLogin, postLogout } from './api/endpoints/identityExampleAPI';
+import { Observable, map, tap, switchMap, catchError, of } from 'rxjs';
+import { IdentityExampleAPIService } from './api/endpoints/identityExampleAPI.service';
 import { SignInRequest } from './api/models/signInRequest';
 
 @Injectable({
@@ -9,30 +10,24 @@ import { SignInRequest } from './api/models/signInRequest';
 export class AuthService {
   private currentUser = signal<any>(null);
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private api: IdentityExampleAPIService
+  ) {}
 
-  async checkAuth(): Promise<boolean> {
-    try {
-      const response = await getUser();
-      if (response.status === 200) {
-        this.currentUser.set(response.data);
-        return true;
-      }
-      return false;
-    } catch (error: any) {
-      return false;
-    }
+  checkAuth(): Observable<boolean> {
+    return this.api.getUser().pipe(
+      tap((data) => this.currentUser.set(data)),
+      map(() => true),
+      catchError(() => of(false))
+    );
   }
 
-  async login(credentials: SignInRequest): Promise<void> {
-    const response = await postLogin(credentials);
-    if (response.status !== 200) {
-      const error = new Error('Login failed');
-      (error as any).status = response.status;
-      (error as any).error = response.data;
-      throw error;
-    }
-    await this.checkAuth();
+  login(credentials: SignInRequest): Observable<void> {
+    return this.api.postLogin(credentials).pipe(
+      switchMap(() => this.checkAuth()),
+      map(() => undefined)
+    );
   }
 
   redirectToLogin(returnUrl?: string): void {
@@ -40,9 +35,12 @@ export class AuthService {
     this.router.navigate(['/login'], { queryParams: { returnUrl: url } });
   }
 
-  async logout(): Promise<void> {
-    await postLogout();
-    this.currentUser.set(null);
-    this.router.navigate(['/login']);
+  logout(): Observable<void> {
+    return this.api.postLogout().pipe(
+      tap(() => {
+        this.currentUser.set(null);
+        this.router.navigate(['/login']);
+      })
+    );
   }
 }

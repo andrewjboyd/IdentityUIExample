@@ -10,11 +10,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     withCredentials: true,
   });
 
+  // Don't redirect on 401 for auth endpoints (login, register)
+  const isAuthEndpoint = req.url.includes('/login') || req.url.includes('/register');
+
   return next(reqWithCredentials).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Status 401 = Unauthorized
-      // Status 0 = CORS error or network error (often means authentication failed but CORS blocks the response)
-      if (error.status === 401 || error.status === 0) {
+      if (error.status === 401 && !isAuthEndpoint) {
         authService.redirectToLogin();
       }
       return throwError(() => error);

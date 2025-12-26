@@ -13,7 +13,7 @@ export class App implements OnInit {
 
   constructor(private authService: AuthService) {}
 
-  async ngOnInit(): Promise<void> {
-    await this.authService.checkAuth();
+  ngOnInit(): void {
+    this.authService.checkAuth().subscribe();
   }
 }
