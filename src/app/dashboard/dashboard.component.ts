@@ -10,8 +10,4 @@ import { AuthService } from '../auth.service';
 })
 export class DashboardComponent {
   constructor(private authService: AuthService) {}
-
-  logout(): void {
-    this.authService.logout().subscribe();
-  }
 }

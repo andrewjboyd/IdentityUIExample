@@ -18,6 +18,10 @@ export class App implements OnInit {
     this.menuCollapsed.update((v) => !v);
   }
 
+  logout(): void {
+    this.authService.logout().subscribe();
+  }
+
   ngOnInit(): void {
     this.authService.checkAuth().subscribe();
   }
