@@ -7,3 +7,4 @@
 
 export * from './signInRequest';
 export * from './signUpRequest';
+export * from './userResponse';

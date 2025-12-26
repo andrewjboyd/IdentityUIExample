@@ -26,7 +26,8 @@ import {
 
 import type {
   SignInRequest,
-  SignUpRequest
+  SignUpRequest,
+  UserResponse
 } from '../models';
 
 
@@ -98,9 +99,20 @@ export class IdentityExampleAPIService {
     );
   }
 
+ getUsers<TData = UserResponse[]>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getUsers<TData = UserResponse[]>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getUsers<TData = UserResponse[]>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getUsers<TData = UserResponse[]>(
+     options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.get<TData>(
+      `https://localhost:7142/users`,options
+    );
+  }
+
 };
 
 export type PostRegisterClientResult = NonNullable<void>
 export type PostLoginClientResult = NonNullable<void>
 export type PostLogoutClientResult = NonNullable<void>
 export type GetUserClientResult = NonNullable<void>
+export type GetUsersClientResult = NonNullable<UserResponse[]>

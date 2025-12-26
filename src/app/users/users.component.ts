@@ -1,0 +1,29 @@
+import { Component, OnInit, signal } from '@angular/core';
+import { IdentityExampleAPIService } from '../api/endpoints/identityExampleAPI.service';
+import { UserResponse } from '../api/models';
+
+@Component({
+  selector: 'app-users',
+  standalone: true,
+  imports: [],
+  templateUrl: './users.component.html',
+  styleUrl: './users.component.css',
+})
+export class UsersComponent implements OnInit {
+  users = signal<UserResponse[]>([]);
+  loading = signal(true);
+
+  constructor(private apiService: IdentityExampleAPIService) {}
+
+  ngOnInit(): void {
+    this.apiService.getUsers().subscribe({
+      next: (users) => {
+        this.users.set(users);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.loading.set(false);
+      },
+    });
+  }
+}
