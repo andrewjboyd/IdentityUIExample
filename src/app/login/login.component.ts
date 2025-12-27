@@ -26,19 +26,21 @@ export class LoginComponent {
     this.error.set(null);
     this.loading.set(true);
 
-    this.authService.login({
-      email: this.email(),
-      password: this.password(),
-    }).subscribe({
-      next: () => {
-        const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-        this.router.navigateByUrl(returnUrl);
-        this.loading.set(false);
-      },
-      error: (err) => {
-        this.error.set(err.error?.detail || 'Login failed. Please try again.');
-        this.loading.set(false);
-      }
-    });
+    this.authService
+      .login({
+        email: this.email(),
+        password: this.password(),
+      })
+      .subscribe({
+        next: () => {
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+          this.router.navigateByUrl(returnUrl);
+          this.loading.set(false);
+        },
+        error: (err) => {
+          this.error.set(err.error?.detail || 'Login failed. Please try again.');
+          this.loading.set(false);
+        },
+      });
   }
 }

@@ -12,22 +12,26 @@ export class AuthService {
 
   constructor(
     private router: Router,
-    private api: IdentityExampleAPIService
+    private api: IdentityExampleAPIService,
   ) {}
 
   checkAuth(): Observable<boolean> {
     return this.api.getUser().pipe(
       tap((data) => this.currentUser.set(data)),
       map(() => true),
-      catchError(() => of(false))
+      catchError(() => of(false)),
     );
   }
 
   login(credentials: SignInRequest): Observable<void> {
     return this.api.postLogin(credentials).pipe(
       switchMap(() => this.checkAuth()),
-      map(() => undefined)
+      map(() => undefined),
     );
+  }
+
+  isLoggedIn(): boolean {
+    return this.currentUser() !== null;
   }
 
   redirectToLogin(returnUrl?: string): void {
@@ -40,7 +44,7 @@ export class AuthService {
       tap(() => {
         this.currentUser.set(null);
         this.router.navigate(['/login']);
-      })
+      }),
     );
   }
 }

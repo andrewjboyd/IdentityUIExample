@@ -25,8 +25,10 @@ import {
 } from 'rxjs';
 
 import type {
+  AspNetClaims,
   SignInRequest,
   SignUpRequest,
+  UserClaimResponse,
   UserResponse
 } from '../models';
 
@@ -63,7 +65,7 @@ export class IdentityExampleAPIService {
   postRegister<TData = void>(
     signUpRequest: SignUpRequest, options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.post<TData>(
-      `https://localhost:7142/register`,
+      `/register`,
       signUpRequest,options
     );
   }
@@ -74,7 +76,7 @@ export class IdentityExampleAPIService {
   postLogin<TData = void>(
     signInRequest: SignInRequest, options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.post<TData>(
-      `https://localhost:7142/login`,
+      `/login`,
       signInRequest,options
     );
   }
@@ -85,7 +87,7 @@ export class IdentityExampleAPIService {
   postLogout<TData = void>(
      options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.post<TData>(
-      `https://localhost:7142/logout`,undefined,options
+      `/logout`,undefined,options
     );
   }
 
@@ -95,7 +97,7 @@ export class IdentityExampleAPIService {
   getUser<TData = void>(
      options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.get<TData>(
-      `https://localhost:7142/user`,options
+      `/user`,options
     );
   }
 
@@ -105,7 +107,27 @@ export class IdentityExampleAPIService {
   getUsers<TData = UserResponse[]>(
      options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.get<TData>(
-      `https://localhost:7142/users`,options
+      `/users`,options
+    );
+  }
+
+ getUsersUserIdClaims<TData = UserClaimResponse[]>(userId: string, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getUsersUserIdClaims<TData = UserClaimResponse[]>(userId: string, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getUsersUserIdClaims<TData = UserClaimResponse[]>(userId: string, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getUsersUserIdClaims<TData = UserClaimResponse[]>(
+    userId: string, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.get<TData>(
+      `/users/${userId}/claims`,options
+    );
+  }
+
+ getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getClaims<TData = AspNetClaims[]>(
+     options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.get<TData>(
+      `/claims`,options
     );
   }
 
@@ -116,3 +138,5 @@ export type PostLoginClientResult = NonNullable<void>
 export type PostLogoutClientResult = NonNullable<void>
 export type GetUserClientResult = NonNullable<void>
 export type GetUsersClientResult = NonNullable<UserResponse[]>
+export type GetUsersUserIdClaimsClientResult = NonNullable<UserClaimResponse[]>
+export type GetClaimsClientResult = NonNullable<AspNetClaims[]>

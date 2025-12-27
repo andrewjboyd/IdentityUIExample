@@ -18,6 +18,10 @@ export class App implements OnInit {
     this.menuCollapsed.update((v) => !v);
   }
 
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
+
   logout(): void {
     this.authService.logout().subscribe();
   }

@@ -1,4 +1,5 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { IdentityExampleAPIService } from '../api/endpoints/identityExampleAPI.service';
 import { UserResponse } from '../api/models';
 
@@ -13,7 +14,14 @@ export class UsersComponent implements OnInit {
   users = signal<UserResponse[]>([]);
   loading = signal(true);
 
-  constructor(private apiService: IdentityExampleAPIService) {}
+  constructor(
+    private apiService: IdentityExampleAPIService,
+    private router: Router,
+  ) {}
+
+  viewClaims(userId: string): void {
+    this.router.navigate(['/users', userId, 'claims']);
+  }
 
   ngOnInit(): void {
     this.apiService.getUsers().subscribe({

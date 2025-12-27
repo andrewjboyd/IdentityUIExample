@@ -11,6 +11,7 @@
         <tr>
           <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Username</th>
           <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Email</th>
+          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -18,6 +19,14 @@
           <tr class="border-t border-gray-200 hover:bg-gray-50">
             <td class="px-4 py-2 text-sm text-gray-900">{{ user.userName }}</td>
             <td class="px-4 py-2 text-sm text-gray-900">{{ user.email }}</td>
+            <td class="px-4 py-2 text-sm text-gray-900">
+              <button
+                (click)="viewClaims(user.id!)"
+                class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded border border-gray-300"
+              >
+                Claims
+              </button>
+            </td>
           </tr>
         }
       </tbody>

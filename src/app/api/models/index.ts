@@ -5,6 +5,8 @@
  * OpenAPI spec version: v1
  */
 
+export * from './aspNetClaims';
 export * from './signInRequest';
 export * from './signUpRequest';
+export * from './userClaimResponse';
 export * from './userResponse';

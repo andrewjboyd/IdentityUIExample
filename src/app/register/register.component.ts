@@ -18,7 +18,10 @@ export class RegisterComponent {
   error = signal<string | null>(null);
   loading = signal(false);
 
-  constructor(private authService: AuthService, private api: IdentityExampleAPIService) {}
+  constructor(
+    private authService: AuthService,
+    private api: IdentityExampleAPIService,
+  ) {}
 
   onSubmit(): void {
     this.error.set(null);
@@ -30,23 +33,29 @@ export class RegisterComponent {
 
     this.loading.set(true);
 
-    this.api.postRegister({
-      email: this.email(),
-      password: this.password(),
-    }).subscribe({
-      next: () => {
-        this.loading.set(false);
-        this.authService.redirectToLogin();
-      },
-      error: (err) => {
-        this.loading.set(false);
-        if (err.status === 400 && err.error) {
-          const errorData = err.error;
-          this.error.set(Array.isArray(errorData) ? errorData.join('\n') : 'Registration failed. Please try again.');
-        } else {
-          this.error.set('Registration failed. Please try again.');
-        }
-      }
-    });
+    this.api
+      .postRegister({
+        email: this.email(),
+        password: this.password(),
+      })
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.authService.redirectToLogin();
+        },
+        error: (err) => {
+          this.loading.set(false);
+          if (err.status === 400 && err.error) {
+            const errorData = err.error;
+            this.error.set(
+              Array.isArray(errorData)
+                ? errorData.join('\n')
+                : 'Registration failed. Please try again.',
+            );
+          } else {
+            this.error.set('Registration failed. Please try again.');
+          }
+        },
+      });
   }
 }
