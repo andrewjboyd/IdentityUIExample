@@ -13,7 +13,7 @@ import { ToastService } from './toast.service';
 export class App implements OnInit {
   protected readonly title = signal('Identity UI Example');
   protected readonly menuCollapsed = signal(false);
-  public authError = false;
+  protected readonly authError = signal(false);
 
   constructor(
     private authService: AuthService,
@@ -35,7 +35,7 @@ export class App implements OnInit {
   ngOnInit(): void {
     this.authService.checkAuth().subscribe({
       error: (err: HttpErrorResponse) => {
-        this.authError = true;
+        this.authError.set(true);
         console.error('Authentication check failed:', err);
       },
     });
