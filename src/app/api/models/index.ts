@@ -6,6 +6,7 @@
  */
 
 export * from './aspNetClaims';
+export * from './postUserClaimsRequest';
 export * from './signInRequest';
 export * from './signUpRequest';
 export * from './userClaimResponse';

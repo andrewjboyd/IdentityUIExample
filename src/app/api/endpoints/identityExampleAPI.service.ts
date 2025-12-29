@@ -26,6 +26,7 @@ import {
 
 import type {
   AspNetClaims,
+  PostUserClaimsRequest,
   SignInRequest,
   SignUpRequest,
   UserClaimResponse,
@@ -121,6 +122,21 @@ export class IdentityExampleAPIService {
     );
   }
 
+ postUsersUserIdClaims<TData = void>(userId: string,
+    postUserClaimsRequest: PostUserClaimsRequest, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ postUsersUserIdClaims<TData = void>(userId: string,
+    postUserClaimsRequest: PostUserClaimsRequest, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ postUsersUserIdClaims<TData = void>(userId: string,
+    postUserClaimsRequest: PostUserClaimsRequest, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  postUsersUserIdClaims<TData = void>(
+    userId: string,
+    postUserClaimsRequest: PostUserClaimsRequest, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.post<TData>(
+      `/users/${userId}/claims`,
+      postUserClaimsRequest,options
+    );
+  }
+
  getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
  getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
  getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
@@ -139,4 +155,5 @@ export type PostLogoutClientResult = NonNullable<void>
 export type GetUserClientResult = NonNullable<void>
 export type GetUsersClientResult = NonNullable<UserResponse[]>
 export type GetUsersUserIdClaimsClientResult = NonNullable<UserClaimResponse[]>
+export type PostUsersUserIdClaimsClientResult = NonNullable<void>
 export type GetClaimsClientResult = NonNullable<AspNetClaims[]>

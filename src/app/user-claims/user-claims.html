@@ -1,30 +1,48 @@
 <div class="space-y-4">
-  <div class="flex items-center gap-4">
+  <div class="flex items-center justify-between">
     <a routerLink="/users" class="text-blue-600 hover:text-blue-800">&larr; Back to Users</a>
+    @if (!loading() && claimsWithStatus().length > 0) {
+      <button
+        (click)="save()"
+        [disabled]="saving()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ saving() ? 'Saving...' : 'Save' }}
+      </button>
+    }
   </div>
 
   <h1 class="text-2xl font-bold">User Claims</h1>
 
   @if (loading()) {
     <p class="text-gray-500">Loading...</p>
-  } @else if (claims().length === 0) {
-    <p class="text-gray-500">No claims found for this user.</p>
+  } @else if (claimsWithStatus().length === 0) {
+    <p class="text-gray-500">No claims available.</p>
   } @else {
-    <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
-      <thead class="bg-gray-100">
-        <tr>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">ID</th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">Value</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (claim of claims(); track claim.id) {
-          <tr class="border-t border-gray-200 hover:bg-gray-50">
-            <td class="px-4 py-2 text-sm text-gray-900">{{ claim.id }}</td>
-            <td class="px-4 py-2 text-sm text-gray-900">{{ claim.value }}</td>
-          </tr>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="space-y-2">
+        @for (claim of claimsWithStatus(); track claim.claimValue) {
+          <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+            <input
+              type="checkbox"
+              [checked]="claim.hasAccess"
+              (change)="toggleClaim(claim.claimValue, claim.hasAccess)"
+              class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span class="text-sm text-gray-900">{{ claim.claimValue }}</span>
+          </label>
         }
-      </tbody>
-    </table>
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <button
+        (click)="save()"
+        [disabled]="saving()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ saving() ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
   }
 </div>

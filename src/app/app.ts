@@ -1,6 +1,8 @@
 import { Component, signal, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { ToastService } from './toast.service';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +13,12 @@ import { AuthService } from './auth.service';
 export class App implements OnInit {
   protected readonly title = signal('Identity UI Example');
   protected readonly menuCollapsed = signal(false);
+  public authError = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    protected toastService: ToastService,
+  ) {}
 
   toggleMenu(): void {
     this.menuCollapsed.update((v) => !v);
@@ -27,6 +33,11 @@ export class App implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.checkAuth().subscribe();
+    this.authService.checkAuth().subscribe({
+      error: (err: HttpErrorResponse) => {
+        this.authError = true;
+        console.error('Authentication check failed:', err);
+      },
+    });
   }
 }

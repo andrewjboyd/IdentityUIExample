@@ -1,6 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, map, tap, switchMap, catchError, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, map, tap, switchMap, catchError, of, throwError } from 'rxjs';
 import { IdentityExampleAPIService } from './api/endpoints/identityExampleAPI.service';
 import { SignInRequest } from './api/models/signInRequest';
 
@@ -19,7 +20,12 @@ export class AuthService {
     return this.api.getUser().pipe(
       tap((data) => this.currentUser.set(data)),
       map(() => true),
-      catchError(() => of(false)),
+      catchError((err: HttpErrorResponse) => {
+        if (err.status === 401) {
+          return of(false);
+        }
+        return throwError(() => err);
+      }),
     );
   }
 
