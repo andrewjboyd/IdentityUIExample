@@ -2,8 +2,12 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { IdentityExampleAPIService } from '../api/endpoints/identityExampleAPI.service';
-import { AspNetClaims, UserClaimResponse } from '../api/models';
+import { UserClaimResponse } from '../api/models';
 import { ToastService } from '../toast.service';
+
+interface Claim {
+  claimValue: string;
+}
 
 interface ClaimWithStatus {
   claimValue: string;
@@ -17,7 +21,7 @@ interface ClaimWithStatus {
   styleUrl: './user-claims.css',
 })
 export class UserClaims implements OnInit {
-  availableClaims = signal<AspNetClaims[]>([]);
+  availableClaims = signal<Claim[]>([]);
   usersClaims = signal<UserClaimResponse[]>([]);
   loading = signal(true);
   saving = signal(false);
@@ -61,7 +65,7 @@ export class UserClaims implements OnInit {
       .filter((c) => c.hasAccess)
       .map((c) => c.claimValue);
 
-    this.apiService.postUsersUserIdClaims(this.userId(), { roles: selectedClaims }).subscribe({
+    this.apiService.postUsersUserIdClaims(this.userId(), { claims: selectedClaims }).subscribe({
       next: () => {
         this.saving.set(false);
         this.toastService.success('Claims saved successfully');
@@ -79,7 +83,7 @@ export class UserClaims implements OnInit {
     if (userId) {
       this.userId.set(userId);
       forkJoin({
-        allClaims: this.apiService.getClaims(),
+        allClaims: this.apiService.getClaims<Claim[]>(),
         userClaims: this.apiService.getUsersUserIdClaims(userId),
       }).subscribe({
         next: ({ allClaims, userClaims }) => {

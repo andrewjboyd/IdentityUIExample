@@ -5,8 +5,11 @@
  * OpenAPI spec version: v1
  */
 
-export * from './aspNetClaims';
+export * from './identityRole';
+export * from './postRoleCreate';
+export * from './postRoleUpdate';
 export * from './postUserClaimsRequest';
+export * from './postUserRolesRequest';
 export * from './signInRequest';
 export * from './signUpRequest';
 export * from './userClaimResponse';

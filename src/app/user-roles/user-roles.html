@@ -1,0 +1,48 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <a routerLink="/users" class="text-blue-600 hover:text-blue-800">&larr; Back to Users</a>
+    @if (!loading() && rolesWithStatus().length > 0) {
+      <button
+        (click)="save()"
+        [disabled]="saving()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ saving() ? 'Saving...' : 'Save' }}
+      </button>
+    }
+  </div>
+
+  <h1 class="text-2xl font-bold">User Roles</h1>
+
+  @if (loading()) {
+    <p class="text-gray-500">Loading...</p>
+  } @else if (rolesWithStatus().length === 0) {
+    <p class="text-gray-500">No roles available.</p>
+  } @else {
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="space-y-2">
+        @for (role of rolesWithStatus(); track role.id) {
+          <label class="flex items-center gap-3 p-2 hover:bg-gray-50 rounded cursor-pointer">
+            <input
+              type="checkbox"
+              [checked]="role.hasAccess"
+              (change)="toggleRole(role.id, role.hasAccess)"
+              class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+            />
+            <span class="text-sm text-gray-900">{{ role.name }}</span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <div class="flex justify-end">
+      <button
+        (click)="save()"
+        [disabled]="saving()"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ saving() ? 'Saving...' : 'Save' }}
+      </button>
+    </div>
+  }
+</div>

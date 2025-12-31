@@ -5,7 +5,7 @@
  * OpenAPI spec version: v1
  */
 
-export interface AspNetClaims {
+export interface PostUserRolesRequest {
   /** @nullable */
-  claimValue?: string | null;
+  roleIds?: string[] | null;
 }

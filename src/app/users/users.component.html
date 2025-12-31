@@ -19,12 +19,18 @@
           <tr class="border-t border-gray-200 hover:bg-gray-50">
             <td class="px-4 py-2 text-sm text-gray-900">{{ user.userName }}</td>
             <td class="px-4 py-2 text-sm text-gray-900">{{ user.email }}</td>
-            <td class="px-4 py-2 text-sm text-gray-900">
+            <td class="px-4 py-2 text-sm text-gray-900 space-x-2">
               <button
                 (click)="viewClaims(user.id!)"
                 class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded border border-gray-300"
               >
                 Claims
+              </button>
+              <button
+                (click)="viewRoles(user.id!)"
+                class="px-3 py-1 text-sm bg-gray-100 hover:bg-gray-200 rounded border border-gray-300"
+              >
+                Roles
               </button>
             </td>
           </tr>

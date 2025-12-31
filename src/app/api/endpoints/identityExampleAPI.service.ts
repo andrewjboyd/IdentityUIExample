@@ -25,8 +25,11 @@ import {
 } from 'rxjs';
 
 import type {
-  AspNetClaims,
+  IdentityRole,
+  PostRoleCreate,
+  PostRoleUpdate,
   PostUserClaimsRequest,
+  PostUserRolesRequest,
   SignInRequest,
   SignUpRequest,
   UserClaimResponse,
@@ -137,13 +140,74 @@ export class IdentityExampleAPIService {
     );
   }
 
- getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
- getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
- getClaims<TData = AspNetClaims[]>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
-  getClaims<TData = AspNetClaims[]>(
+ getClaims<TData = void>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getClaims<TData = void>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getClaims<TData = void>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getClaims<TData = void>(
      options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.get<TData>(
       `/claims`,options
+    );
+  }
+
+ getRoles<TData = void>( options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getRoles<TData = void>( options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getRoles<TData = void>( options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getRoles<TData = void>(
+     options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.get<TData>(
+      `/roles`,options
+    );
+  }
+
+ postRoles<TData = IdentityRole>(postRoleCreate: PostRoleCreate, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ postRoles<TData = IdentityRole>(postRoleCreate: PostRoleCreate, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ postRoles<TData = IdentityRole>(postRoleCreate: PostRoleCreate, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  postRoles<TData = IdentityRole>(
+    postRoleCreate: PostRoleCreate, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.post<TData>(
+      `/roles`,
+      postRoleCreate,options
+    );
+  }
+
+ postRolesRoleId<TData = void>(roleId: string,
+    postRoleUpdate: PostRoleUpdate, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ postRolesRoleId<TData = void>(roleId: string,
+    postRoleUpdate: PostRoleUpdate, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ postRolesRoleId<TData = void>(roleId: string,
+    postRoleUpdate: PostRoleUpdate, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  postRolesRoleId<TData = void>(
+    roleId: string,
+    postRoleUpdate: PostRoleUpdate, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.post<TData>(
+      `/roles/${roleId}`,
+      postRoleUpdate,options
+    );
+  }
+
+ getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getUsersUserIdRoles<TData = void>(
+    userId: string, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.get<TData>(
+      `/users/${userId}/roles`,options
+    );
+  }
+
+ postUsersUserIdRoles<TData = void>(userId: string,
+    postUserRolesRequest: PostUserRolesRequest, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ postUsersUserIdRoles<TData = void>(userId: string,
+    postUserRolesRequest: PostUserRolesRequest, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ postUsersUserIdRoles<TData = void>(userId: string,
+    postUserRolesRequest: PostUserRolesRequest, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  postUsersUserIdRoles<TData = void>(
+    userId: string,
+    postUserRolesRequest: PostUserRolesRequest, options?: HttpClientOptions & { observe?: any }): Observable<any> {
+    return this.http.post<TData>(
+      `/users/${userId}/roles`,
+      postUserRolesRequest,options
     );
   }
 
@@ -156,4 +220,9 @@ export type GetUserClientResult = NonNullable<void>
 export type GetUsersClientResult = NonNullable<UserResponse[]>
 export type GetUsersUserIdClaimsClientResult = NonNullable<UserClaimResponse[]>
 export type PostUsersUserIdClaimsClientResult = NonNullable<void>
-export type GetClaimsClientResult = NonNullable<AspNetClaims[]>
+export type GetClaimsClientResult = NonNullable<void>
+export type GetRolesClientResult = NonNullable<void>
+export type PostRolesClientResult = NonNullable<IdentityRole>
+export type PostRolesRoleIdClientResult = NonNullable<void>
+export type GetUsersUserIdRolesClientResult = NonNullable<void>
+export type PostUsersUserIdRolesClientResult = NonNullable<void>

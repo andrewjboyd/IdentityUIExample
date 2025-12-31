@@ -23,6 +23,10 @@ export class UsersComponent implements OnInit {
     this.router.navigate(['/users', userId, 'claims']);
   }
 
+  viewRoles(userId: string): void {
+    this.router.navigate(['/users', userId, 'roles']);
+  }
+
   ngOnInit(): void {
     this.apiService.getUsers().subscribe({
       next: (users) => {

@@ -5,7 +5,11 @@
  * OpenAPI spec version: v1
  */
 
-export interface PostUserClaimsRequest {
+export interface PostRoleUpdate {
+  /** @nullable */
+  id?: string | null;
+  /** @nullable */
+  roleName?: string | null;
   /** @nullable */
   claims?: string[] | null;
 }
