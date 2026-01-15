@@ -186,10 +186,10 @@ export class IdentityExampleAPIService {
     );
   }
 
- getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
- getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
- getUsersUserIdRoles<TData = void>(userId: string, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
-  getUsersUserIdRoles<TData = void>(
+ getUsersUserIdRoles<TData = number[]>(userId: string, options?: HttpClientOptions & { observe?: 'body' }): Observable<TData>;
+ getUsersUserIdRoles<TData = number[]>(userId: string, options?: HttpClientOptions & { observe: 'events' }): Observable<HttpEvent<TData>>;
+ getUsersUserIdRoles<TData = number[]>(userId: string, options?: HttpClientOptions & { observe: 'response' }): Observable<AngularHttpResponse<TData>>;
+  getUsersUserIdRoles<TData = number[]>(
     userId: string, options?: HttpClientOptions & { observe?: any }): Observable<any> {
     return this.http.get<TData>(
       `/users/${userId}/roles`,options
@@ -224,5 +224,5 @@ export type GetClaimsClientResult = NonNullable<void>
 export type GetRolesClientResult = NonNullable<void>
 export type PostRolesClientResult = NonNullable<IdentityRole>
 export type PostRolesRoleIdClientResult = NonNullable<void>
-export type GetUsersUserIdRolesClientResult = NonNullable<void>
+export type GetUsersUserIdRolesClientResult = NonNullable<number[]>
 export type PostUsersUserIdRolesClientResult = NonNullable<void>

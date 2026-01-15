@@ -23,17 +23,18 @@ interface RoleWithStatus {
 })
 export class UserRoles implements OnInit {
   availableRoles = signal<Role[]>([]);
-  userRoles = signal<Role[]>([]);
+  userRoles = signal<string[]>([]);
   loading = signal(true);
   saving = signal(false);
   userId = signal<string>('');
 
   rolesWithStatus = computed<RoleWithStatus[]>(() => {
-    const userRoleIds = new Set(this.userRoles().map((r) => r.id));
+    const userRoleValues = new Set(this.userRoles().map((c) => c));
+
     return this.availableRoles().map((role) => ({
       id: role.id,
       name: role.name,
-      hasAccess: userRoleIds.has(role.id),
+      hasAccess: userRoleValues.has(role.id),
     }));
   });
 
@@ -46,9 +47,9 @@ export class UserRoles implements OnInit {
 
   toggleRole(roleId: string, currentlyHasAccess: boolean): void {
     if (currentlyHasAccess) {
-      this.userRoles.update((roles) => roles.filter((r) => r.id !== roleId));
+      this.userRoles.update((roles) => roles.filter((r) => r !== roleId));
     } else {
-      const role = this.availableRoles().find((r) => r.id === roleId);
+      const role = this.availableRoles().find((r) => r.id === roleId)?.id;
       if (role) {
         this.userRoles.update((roles) => [...roles, role]);
       }
@@ -80,7 +81,7 @@ export class UserRoles implements OnInit {
       this.userId.set(userId);
       forkJoin({
         allRoles: this.apiService.getRoles<Role[]>(),
-        userRoles: this.apiService.getUsersUserIdRoles<Role[]>(userId),
+        userRoles: this.apiService.getUsersUserIdRoles<string[]>(userId),
       }).subscribe({
         next: ({ allRoles, userRoles }) => {
           this.availableRoles.set(allRoles);

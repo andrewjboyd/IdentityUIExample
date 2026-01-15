@@ -1,0 +1,75 @@
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold">
+      @if (isEditMode()) {
+        Edit Role
+      } @else {
+        Add Role
+      }
+    </h1>
+    <a routerLink="/roles" class="text-blue-600 hover:underline">Back to Roles</a>
+  </div>
+
+  @if (loading()) {
+    <p class="text-gray-500">Loading...</p>
+  } @else {
+    <div class="bg-white border border-gray-200 rounded-lg p-6 space-y-6">
+      <div>
+        <label for="roleName" class="block text-sm font-medium text-gray-700 mb-1">
+          Role Name
+        </label>
+        <input
+          type="text"
+          id="roleName"
+          [value]="roleName()"
+          (input)="updateRoleName($event)"
+          class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          placeholder="Enter role name"
+        />
+      </div>
+
+      <div>
+        <h2 class="text-lg font-medium text-gray-900 mb-3">Claims</h2>
+        @if (claimsWithStatus().length === 0) {
+          <p class="text-gray-500">No claims available.</p>
+        } @else {
+          <div class="space-y-2 max-h-64 overflow-y-auto border border-gray-200 rounded p-3">
+            @for (claim of claimsWithStatus(); track claim.claimValue) {
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-1 rounded">
+                <input
+                  type="checkbox"
+                  [checked]="claim.isSelected"
+                  (change)="toggleClaim(claim.claimValue, claim.isSelected)"
+                  class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                />
+                <span class="text-sm text-gray-900">{{ claim.claimValue }}</span>
+              </label>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="flex gap-3">
+        <button
+          (click)="save()"
+          [disabled]="saving()"
+          class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (saving()) {
+            Saving...
+          } @else if (isEditMode()) {
+            Update Role
+          } @else {
+            Create Role
+          }
+        </button>
+        <a
+          routerLink="/roles"
+          class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 border border-gray-300"
+        >
+          Cancel
+        </a>
+      </div>
+    </div>
+  }
+</div>

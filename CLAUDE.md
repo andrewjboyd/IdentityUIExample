@@ -46,6 +46,9 @@ This is an Angular 21 application that provides a UI for ASP.NET Core Identity m
 - `/users` - User list
 - `/users/:userId/claims` - Manage claims for a specific user
 - `/users/:userId/roles` - Manage roles for a specific user
+- `/roles` - Roles list
+- `/roles/new` - Create new role with claim selection
+- `/roles/:roleId/edit` - Edit role with claim selection
 
 ### SSL Setup
 

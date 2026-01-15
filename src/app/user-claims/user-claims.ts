@@ -21,21 +21,19 @@ interface ClaimWithStatus {
   styleUrl: './user-claims.css',
 })
 export class UserClaims implements OnInit {
-  availableClaims = signal<Claim[]>([]);
+  availableClaims = signal<string[]>([]);
   usersClaims = signal<UserClaimResponse[]>([]);
   loading = signal(true);
   saving = signal(false);
   userId = signal<string>('');
 
   claimsWithStatus = computed<ClaimWithStatus[]>(() => {
-    const userClaimValues = new Set(
-      this.usersClaims().map((c) => c.value?.toLowerCase()),
-    );
+    const userClaimValues = new Set(this.usersClaims().map((c) => c.value?.toLowerCase()));
     return this.availableClaims()
-      .filter((c) => c.claimValue)
+      .filter((c) => c)
       .map((claim) => ({
-        claimValue: claim.claimValue!,
-        hasAccess: userClaimValues.has(claim.claimValue?.toLowerCase()),
+        claimValue: claim!,
+        hasAccess: userClaimValues.has(claim?.toLowerCase()),
       }));
   });
 
@@ -43,19 +41,16 @@ export class UserClaims implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private apiService: IdentityExampleAPIService,
-    private toastService: ToastService,
+    private toastService: ToastService
   ) {}
 
   toggleClaim(claimValue: string, currentlyHasAccess: boolean): void {
     if (currentlyHasAccess) {
       this.usersClaims.update((claims) =>
-        claims.filter((c) => c.value?.toLowerCase() !== claimValue.toLowerCase()),
+        claims.filter((c) => c.value?.toLowerCase() !== claimValue.toLowerCase())
       );
     } else {
-      this.usersClaims.update((claims) => [
-        ...claims,
-        { value: claimValue },
-      ]);
+      this.usersClaims.update((claims) => [...claims, { value: claimValue }]);
     }
   }
 
@@ -83,7 +78,7 @@ export class UserClaims implements OnInit {
     if (userId) {
       this.userId.set(userId);
       forkJoin({
-        allClaims: this.apiService.getClaims<Claim[]>(),
+        allClaims: this.apiService.getClaims<string[]>(),
         userClaims: this.apiService.getUsersUserIdClaims(userId),
       }).subscribe({
         next: ({ allClaims, userClaims }) => {
